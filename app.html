@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CuidaCasa · Gestão de enfermagem em homecare</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+:root{--bg:#F6F8FA;--sf:#fff;--ink:#0E2A3B;--mut:#52687A;--ln:#E2E8EE;--bl:#1F78B4;--onbl:#fff;--blS:#DCEBF6;--aq:#14998B;--aqS:#D9F3EF;--rd:#C0262D;--rdS:#FDE8E8;--am:#B76E00;--amS:#FFF1D6;--gr:#1E8E4E;--grS:#DDF4E6;--sw:236px;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0B1B26;--sf:#122A3A;--ink:#EAF3F8;--mut:#9DB5C4;--ln:#23435A;--bl:#6BB6EA;--onbl:#06202F;--blS:#16415C;--aq:#43D1C0;--aqS:#0F4440;--rd:#FF8A8F;--rdS:#4A1C20;--am:#F2B04E;--amS:#4A3410;--gr:#5FD08D;--grS:#12402A}}
+:root[data-theme="dark"]{--bg:#0B1B26;--sf:#122A3A;--ink:#EAF3F8;--mut:#9DB5C4;--ln:#23435A;--bl:#6BB6EA;--onbl:#06202F;--blS:#16415C;--aq:#43D1C0;--aqS:#0F4440;--rd:#FF8A8F;--rdS:#4A1C20;--am:#F2B04E;--amS:#4A3410;--gr:#5FD08D;--grS:#12402A}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.45 "Atkinson Hyperlegible",system-ui,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--bl);outline-offset:2px}
+.app{min-height:100vh}
+main{padding:14px 14px 96px;max-width:980px;margin:0 auto}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;background:var(--sf);border-top:1px solid var(--ln);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav .brand,nav .collapse{display:none}
+nav button.it{flex:1;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 4px;min-height:60px;color:var(--mut);font-size:12.5px;font-weight:700}
+nav button.it.on{color:var(--bl)}
+nav button.it.on svg{background:var(--blS);border-radius:12px;padding:3px;width:36px;height:30px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+h1{font-size:22px;margin:0}h2{font-size:18px;margin:18px 0 8px}h3{font-size:16px;margin:0}
+.mut{color:var(--mut);font-size:14px}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:18px;padding:14px;margin-bottom:10px}
+.btn{border:0;border-radius:14px;min-height:48px;padding:0 18px;font-weight:700;background:var(--bl);color:var(--onbl);display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn.sec{background:var(--blS);color:var(--bl)}.btn.ok{background:var(--aq);color:#fff}.btn.out{background:none;border:2px solid var(--ln);color:var(--ink)}.btn.wide{width:100%}.btn.sm{min-height:40px;padding:0 12px;font-size:14px}
+.seg{display:flex;background:var(--blS);border-radius:14px;padding:4px;gap:4px;margin-bottom:12px}
+.seg button{flex:1;border:0;background:none;border-radius:11px;min-height:42px;font-weight:700;color:var(--mut)}
+.seg button.on{background:var(--sf);color:var(--bl);box-shadow:0 1px 3px rgba(14,42,59,.15)}
+.sw{display:flex;align-items:center;gap:10px;background:var(--sf);border:1px solid var(--ln);border-radius:30px;padding:6px 12px 6px 8px;font-weight:700;font-size:14px}
+.sw i{width:46px;height:28px;border-radius:20px;background:var(--mut);position:relative;transition:.2s;flex:none}
+.sw i:after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.2s}
+.sw.on i{background:var(--aq)}.sw.on i:after{left:21px}
+.ap{border-left:8px solid var(--c);display:block}
+.row{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.chip{display:inline-block;border-radius:20px;padding:3px 10px;font-size:13px;font-weight:700;background:var(--blS);color:var(--bl)}
+.chip.t{background:color-mix(in srgb,var(--c) 18%,transparent);color:var(--c)}
+.s-pend{background:var(--amS);color:var(--am)}.s-conf{background:var(--blS);color:var(--bl)}.s-and{background:var(--aqS);color:var(--aq)}.s-conc{background:var(--grS);color:var(--gr)}
+.acts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.acts .btn{flex:1}
+.dnav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.dnav button{width:48px;height:48px;border-radius:14px;border:1px solid var(--ln);background:var(--sf);display:grid;place-items:center}
+.mgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:12px}
+.mgrid b{text-align:center;font-size:12px;color:var(--mut)}
+.mgrid button{aspect-ratio:1;min-height:44px;border:1px solid var(--ln);border-radius:12px;background:var(--sf);font-weight:700;position:relative}
+.mgrid button.sel{background:var(--bl);color:var(--onbl);border-color:var(--bl)}.mgrid button.td{border:2px solid var(--aq)}
+.mgrid button i{position:absolute;bottom:5px;left:50%;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:var(--aq)}
+.alg{background:#B3141B;color:#fff;border-radius:16px;padding:14px;position:sticky;top:6px;z-index:5;margin-bottom:12px;box-shadow:0 4px 14px rgba(179,20,27,.4)}
+.alg b{display:block;font-size:17px;margin-bottom:6px}.alg span{display:inline-block;background:#fff;color:#8E0F15;border-radius:20px;padding:4px 12px;margin:3px 4px 0 0;font-weight:700}
+.hc .card{border:2px solid var(--ink)}.hc h3{font-size:19px}
+.med{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--ln)}
+.med:last-child{border:0}
+.med input{width:32px;height:32px;accent-color:var(--aq);flex:none}
+.med.done .nm{text-decoration:line-through;color:var(--mut)}
+.med .nm{flex:1;font-size:17px;font-weight:700}
+.ib{width:46px;height:46px;border-radius:14px;border:2px solid var(--ln);background:var(--sf);display:grid;place-items:center;color:var(--bl);flex:none}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:10px}.fg .full{grid-column:1/-1}
+label{display:block;font-weight:700;font-size:14px;margin-bottom:4px}
+input[type=text],input[type=number],input[type=date],input[type=time],select,textarea{width:100%;min-height:48px;border:2px solid var(--ln);border-radius:12px;padding:8px 12px;background:var(--sf)}
+input[type=range]{width:100%;accent-color:var(--bl);height:32px}
+.av{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--bl),var(--aq));color:#fff;display:grid;place-items:center;font-weight:700;font-size:20px;flex:none}
+.coren{display:inline-flex;align-items:center;gap:5px;background:var(--grS);color:var(--gr);border-radius:20px;padding:3px 10px;font-size:13px;font-weight:700}
+.star{color:#E0A100;font-weight:700}
+table{width:100%;border-collapse:collapse}td,th{padding:9px 4px;border-bottom:1px solid var(--ln);text-align:left}td:last-child,th:last-child{text-align:right}
+.sum{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}.sum .card{margin:0}.sum b{font-size:22px;display:block}
+#modal{position:fixed;inset:0;background:rgba(8,24,36,.6);z-index:50;display:none;align-items:flex-end;justify-content:center}
+#modal.open{display:flex}
+.sheet{background:var(--sf);width:100%;max-width:520px;max-height:92vh;overflow:auto;border-radius:24px 24px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px))}
+#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:14px;font-weight:700;z-index:60;opacity:0;pointer-events:none;transition:.25s;max-width:90vw;text-align:center}
+#toast.show{opacity:1}
+.rcp{border:2px dashed var(--ln);border-radius:14px;padding:14px;margin:10px 0}
+.rx{background:#FFFDF3;color:#222;border-radius:12px;padding:16px;font-family:Georgia,serif;border:1px solid #E6DFB8}
+.empty{text-align:center;color:var(--mut);padding:26px 10px}
+@media (min-width:900px){
+ .app{display:grid;grid-template-columns:var(--sw) 1fr;transition:grid-template-columns .2s}
+ .app.col{--sw:80px}
+ main{padding:28px 32px 40px;width:100%}
+ nav{position:sticky;top:0;height:100vh;flex-direction:column;border-top:0;border-right:1px solid var(--ln);padding:18px 12px;gap:6px}
+ nav .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:19px;color:var(--bl);padding:4px 8px 18px}
+ nav button.it{flex:none;flex-direction:row;gap:12px;justify-content:flex-start;padding:0 14px;min-height:52px;border-radius:14px;font-size:16px}
+ nav button.it.on{background:var(--blS)}nav button.it.on svg{background:none;padding:0;width:22px;height:22px}
+ nav .collapse{display:flex;margin-top:6px;border:1px solid var(--ln);background:none;border-radius:12px;min-height:44px;align-items:center;justify-content:center}
+ .app.col nav .lb,.app.col nav .brand span{display:none}.app.col nav button.it{justify-content:center;padding:0}
+ #modal{align-items:center}.sheet{border-radius:24px}
+ #toast{bottom:30px}
+ .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+}
+.login{min-height:80vh;display:grid;place-content:center;gap:14px;text-align:center;max-width:360px;margin:0 auto}
+.login .logo{width:76px;height:76px;border-radius:24px;background:linear-gradient(135deg,var(--bl),var(--aq));color:#fff;display:grid;place-items:center;margin:0 auto}
+.gbtn{background:#fff;color:#1f1f1f;border:2px solid #dadce0}
+.app.out nav{display:none}.app.out{display:block}.app.out main{padding-bottom:24px}
+.chks{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.chk{display:flex;align-items:center;gap:8px;border:2px solid var(--ln);border-radius:12px;padding:8px 12px;min-height:48px;margin:0;font-weight:400}
+.chk input{width:22px;height:22px;accent-color:var(--bl)}
+input.bad{border-color:var(--rd)}
+.ib{position:relative}.ib .dot{position:absolute;top:-5px;right:-5px;width:15px;height:15px;border-radius:50%;background:var(--gr);border:2px solid var(--sf)}
+.late{border-left-color:var(--rd)!important;background:var(--rdS)}
+.alt{background:var(--rd);color:#fff;border-radius:12px;padding:10px 12px;margin-top:10px;font-weight:700}
+.dly{display:flex;gap:6px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.xb{border:0;background:none;font-size:18px;line-height:1;color:inherit;padding:0 0 0 6px}
+.fbar{display:flex;gap:8px;align-items:center}.fbar input{flex:1;min-width:0}
+nav .fbk{display:none;color:var(--mut);font-size:14px}
+@media (min-width:768px){.two{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}.two>*{min-width:0}}
+@media (min-width:900px){nav .fbk{display:flex;margin-top:auto;border:0;background:none;min-height:44px;align-items:center;gap:10px;padding:0 14px;border-radius:12px;text-align:left}.app.col nav .fbk{justify-content:center;padding:0}}
+.fg input[type=datetime-local]{width:100%;min-height:48px;border:2px solid var(--ln);border-radius:12px;padding:8px 12px;background:var(--sf)}
+/* visual limpo: uma cor de destaque; cor só para alerta e estado */
+.ap{border:1px solid var(--ln)}
+.chip{background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink)}
+.chip.t{background:none;padding:0;font-size:14px;color:var(--ink)}
+.acts .btn{padding:0 8px}
+[style*="text-transform:capitalize"]{text-transform:none!important}[style*="text-transform:capitalize"]::first-letter{text-transform:uppercase}
+.chip.t::before{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--c);margin-right:6px}
+.s-pend,.s-conf{background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--mut)}
+.s-and{background:var(--blS);color:var(--bl)}
+.s-conc{background:none;color:var(--gr)}
+.seg{background:color-mix(in srgb,var(--ink) 7%,transparent)}.seg button.on{color:var(--ink)}
+.btn.ok{background:var(--bl);color:var(--onbl)}
+.btn.sec{background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink)}
+.sw.on i{background:var(--bl)}
+.av{background:var(--blS);color:var(--bl)}
+.login .logo{background:var(--bl);color:var(--onbl)}
+.med input,.chk input{accent-color:var(--bl)}
+.mgrid button.td{border-color:var(--bl)}.mgrid button i{background:var(--bl)}
+.alt{background:var(--rdS);color:var(--rd);border:1px solid var(--rd)}
+.late{border:2px solid var(--rd)!important}
+.alg{box-shadow:none}
+:root{color-scheme:light dark}:root[data-theme="light"]{color-scheme:light}:root[data-theme="dark"]{color-scheme:dark}
+.top{flex-wrap:wrap}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+@media print{body>*:not(#modal){display:none!important}#modal{position:static;background:none;display:block}.sheet{max-height:none;box-shadow:none}.noprint{display:none!important}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+ <nav id="nav"></nav>
+ <main id="main"></main>
+</div>
+<div id="modal"></div><div id="toast" role="status"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
+<script>
+const I={cal:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/>',users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-4 3.5-5.5 6.5-5.5s5.700 1.500 6.500 5.500M16 4.500a3.500 3.500 0 010 7M18 14.800c2 .6 3.200 2.300 3.500 5"/>',search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',wallet:'<rect x="3" y="6" width="18" height="14" rx="3"/><path d="M3 10h18M16 15h2"/>',menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',check:'<path d="M5 12l5 5 9-10"/>',doc:'<path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h7"/>',share:'<circle cx="6" cy="12" r="2.500"/><circle cx="18" cy="6" r="2.500"/><circle cx="18" cy="18" r="2.500"/><path d="M8.200 10.800l7.600-3.600M8.200 13.200l7.600 3.600"/>',back:'<path d="M15 5l-7 7 7 7"/>',fwd:'<path d="M9 5l7 7-7 7"/>',cross:'<path d="M12 4v16M4 12h16"/>',flag:'<path d="M5 21V4m0 0h11l-2 4 2 4H5"/>',edit:'<path d="M4 20h4l10-10-4-4L4 16zM13 7l4 4"/>',moon:'<path d="M20 14.500A8 8 0 019.500 4a8 8 0 1010.500 10.500z"/>',pulse:'<path d="M3 12h4l3-8 4 16 3-8h4"/>'};
+const ic=(n,s=22)=>`<svg width="s"height="{s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${I[n]}</svg>`;
+const $=s=>document.querySelector(s);
+const brl=v=>v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const D0=d=>{d=new Date(d);d.setHours(0,0,0,0);return d};
+const add=(d,n)=>{d=D0(d);d.setDate(d.getDate()+n);return d};
+const key=d=>{d=new Date(d);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const hm=t=>new Date(t).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+const dl=(d,o)=>new Date(d).toLocaleDateString('pt-BR',o);
+const TODAY=D0(new Date()),NOW=Date.now(),H=3600000;
+const TY={p12:{l:'Plantão 12h',c:'var(--bl)',h:12},p24:{l:'Plantão 24h',c:'var(--aq)',h:24},visita:{l:'Visita pontual',c:'var(--am)',h:1}};
+const ST={pend:'Pendente',conf:'Confirmado',and:'Em andamento',conc:'Concluído'};
+const LS='cuidacasa-perfil';
+const ME={n:'',role:'Técnico(a) de Enfermagem',coren:'',cpf:'',rg:'',rgOrg:'',nasc:'',tel:'',email:'',cidade:'',sp:[],r:5,rv:0};
+try{Object.assign(ME,JSON.parse(localStorage.getItem(LS)||'{}'))}catch(x){}
+const P=[
+{id:1,n:'Helena Ribeiro',age:84,dx:'Geriatria · hipertensão e diabetes',end:'Rua das Acácias, 120',al:{'Medicamentos':['Dipirona','Penicilina'],'Materiais':['Látex'],'Alimentos':['Camarão']},meds:[['Losartana','50 mg','08:00'],['Metformina','850 mg','12:00'],['Paracetamol','750 mg','14:00'],['Sinvastatina','20 mg','20:00']],vit:[]},
+{id:2,n:'Antônio Farias',age:71,dx:'Pós-operatório de quadril',end:'Av. Brasil, 905, ap. 31',al:{'Medicamentos':['AAS'],'Materiais':['Iodo']},meds:[['Omeprazol','20 mg','07:00'],['Tramadol','50 mg','12:00'],['Paracetamol','750 mg','18:00'],['Enoxaparina','40 mg','20:00']],vit:[]},
+{id:3,n:'Lucas Oliveira',age:6,dx:'Pediatria · curativo de queimadura',end:'Rua do Ipê, 48',al:{'Medicamentos':['Amoxicilina'],'Alimentos':['Ovo']},meds:[['Vitamina D','3 gotas','09:00'],['Paracetamol gotas','10 gotas','15:00']],vit:[]}];
+P.forEach(p=>p.meds=p.meds.map((m,i)=>({n:m[0],d:m[1],t:m[2],done:null,rx:i==0&&p.id<3?'demo':null})));
+P[0].dep='Dependência parcial';P[1].dep='Dependência total';P[2].dep='Dependência parcial';
+try{const sv=JSON.parse(localStorage.getItem(LS+'-pac')||'null');if(Array.isArray(sv)&&sv.length)P.splice(0,P.length,...sv)}catch(x){}
+P.forEach(p=>p.meds.forEach(m=>{if(m.done&&key(m.done)!=key(TODAY))m.done=null}));
+let A=[
+{id:1,d:key(TODAY),s:'07:00',ty:'p12',p:1,st:'and',rate:35,ci:NOW-3.4*H,co:null,paid:null},
+{id:2,d:key(TODAY),s:'19:30',ty:'visita',p:3,st:'conf',rate:80,ci:null,co:null,paid:null},
+{id:3,d:key(add(TODAY,1)),s:'19:00',ty:'p24',p:2,st:'pend',rate:32,ci:null,co:null,paid:null},
+{id:4,d:key(add(TODAY,2)),s:'07:00',ty:'p12',p:1,st:'conf',rate:35,ci:null,co:null,paid:null},
+{id:5,d:key(add(TODAY,5)),s:'07:00',ty:'p24',p:2,st:'pend',rate:32,ci:null,co:null,paid:null},
+{id:6,d:key(add(TODAY,-1)),s:'07:00',ty:'p12',p:1,st:'conc',rate:35,ci:add(TODAY,-1).getTime()+7*H,co:add(TODAY,-1).getTime()+19*H,paid:null},
+{id:7,d:key(add(TODAY,-3)),s:'19:00',ty:'p12',p:2,st:'conc',rate:32,ci:add(TODAY,-3).getTime()+19*H,co:add(TODAY,-3).getTime()+31*H,paid:'PIX'},
+{id:8,d:key(add(TODAY,-5)),s:'14:00',ty:'visita',p:3,st:'conc',rate:80,ci:add(TODAY,-5).getTime()+14*H,co:add(TODAY,-5).getTime()+15.5*H,paid:null},
+{id:9,d:key(NOW-2.5*H),s:new Date(NOW-2.5*H).toTimeString().slice(0,5),ty:'visita',p:2,st:'and',rate:80,ci:NOW-2.5*H,co:null,paid:null}];
+A.forEach(a=>{a.valor=a.rate;a.mode='hora'});
+try{const sa=JSON.parse(localStorage.getItem(LS+'-ag')||'null');if(Array.isArray(sa))A=sa}catch(x){}
+const NU=[
+{n:'Carla Mendes',role:'Enfermeira',sp:['Geriatria','Curativos'],km:2.4,r:4.9,rv:128,coren:'PR-482.110-ENF',days:[1,2,3,4,5],h:[7,19],v:{p12:450,p24:800,av:90}},
+{n:'Rafael Souza',role:'Técnico de Enfermagem',sp:['Pediatria','Curativos'],km:5.1,r:4.7,rv:64,coren:'PR-912.334-TEC',days:[0,5,6],h:[0,24],v:{p12:380,p24:700,av:70}},
+{n:'Juliana Prado',role:'Enfermeira',sp:['Pediatria','Curativos'],km:8.8,r:5,rv:41,coren:'PR-377.801-ENF',days:[1,3,5],h:[8,18],v:{p12:480,p24:860,av:110}},
+{n:'Marcos Teixeira',role:'Técnico de Enfermagem',sp:['Geriatria'],km:14,r:4.6,rv:23,coren:'PR-660.245-TEC',days:[0,1,2,3,4,5,6],h:[0,24],v:{p12:360,p24:650,av:65}}];
+const S={user:null,edit:false,tab:'agenda',view:'dia',date:TODAY,avail:true,pat:null,fsub:'fin',col:false,q:{sp:'Geriatria',km:10,d:key(add(TODAY,1)),t:'08:00',run:false}};
+S.lgpd=(()=>{try{return !!localStorage.getItem(LS+'-lgpd')}catch(x){return false}})();S.tmp=null;S.lock=false;S.fm=TODAY.getMonth();S.fy=TODAY.getFullYear();S.np=null;S.role='prof';S.fid=+((()=>{try{return localStorage.getItem(LS+'-fam')}catch(x){return 0}})()||0);
+const RO='Cadastro feito pela família: somente leitura';const lk=p=>p.origem=='fam';
+const FEEDBACK_WA='';
+S.tema=(()=>{try{return localStorage.getItem(LS+'-tema')||'auto'}catch(x){return 'auto'}})();
+function applyTheme(){const r=document.documentElement;if(S.tema=='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',S.tema)}
+applyTheme();
+function themeSeg(){return `<div class="seg" style="margin:14px 0 0">${[['auto','Automático'],['light','Claro'],['dark','Escuro']].map(x=>`<button class="${S.tema==x[0]?'on':''}" data-a="tema" data-v="x[0]">{x[1]}</button>`).join('')}</div>`}
+S.inv=null;S.invAsk=false;try{const m=location.hash.match(/[#&]cc=([^&]+)/);if(m)S.inv=JSON.parse(decodeURIComponent(escape(atob(m[1].replace(/-/g,'+').replace(/_/g,'/')))))}catch(x){}
+const vis=p=>!p.del&&!p.trash&&(p.origem!='fam'||p.linked);
+function restoreP(p){delete p.trash;if(p.trashAp){p.trashAp.forEach(a=>{a.id=Math.max(0,...A.map(q=>q.id))+1;A.push(a)});delete p.trashAp}save();saveA()}
+const genCode=()=>{const al='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let c;do{c='CC-'+[...crypto.getRandomValues(new Uint8Array(6))].map(x=>al[x%al.length]).join('')}while(P.some(p=>p.code==c));return c};
+const normCode=t=>String(t||'').toUpperCase().replace(/^CUIDACASA:/,'').replace(/[^A-Z0-9]/g,'');
+const E=x=>esc(unesc(String(x==null?'':x))).slice(0,200);
+function invLink(p){const o={c:p.code,n:p.n,a:p.age,d:p.dx,e:p.end,p:p.dep,l:p.al,t:p.ct,m:p.meds.map(m=>[m.n,m.d,m.t])};return location.href.split('#')[0]+'#cc='+btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function importInv(o){if(!o||typeof o!='object')return null;const code=normCode(o.c);if(!code)return null;
+const ex=P.find(p=>!p.del&&p.code&&normCode(p.code)==code);if(ex&&ex.famOwner&&ex.trash)return null;if(ex){if(ex.trash)restoreP(ex);if(ex.origem=='fam'&&!ex.linked){ex.linked=true;save()}return ex}
+const al={Medicamentos:[],Materiais:[],Alimentos:[]};if(o.l&&typeof o.l=='object')Object.keys(al).forEach(k=>{if(Array.isArray(o.l[k]))al[k]=o.l[k].slice(0,30).map(E).filter(Boolean)});
+const ct=o.t&&typeof o.t=='object'?o.t:{};
+const np={id:P.length+1,custom:true,origem:'fam',linked:true,src:'link',code:'CC-'+code.replace(/^CC/,'').slice(0,6),n:E(o.n)||'Paciente',age:Math.max(0,Math.min(120,+o.a||0)),dx:E(o.d),end:E(o.e),dep:['Independente','Dependência parcial','Dependência total'].includes(o.p)?o.p:'Independente',al,ct:{n:E(ct.n),par:E(ct.par),tel:E(ct.tel)},meds:(Array.isArray(o.m)?o.m:[]).slice(0,30).map(m=>({n:E(m&&m[0]),d:E(m&&m[1]),t:/^\d\d:\d\d$/.test(m&&m[2])?m[2]:'08:00',done:null,rx:null})).filter(m=>m.n),vit:[]};
+P.push(np);save();return np}
+function showInv(){modal(`<h2 style="margin-top:0">Adicionar paciente</h2><p>Você recebeu o cadastro de <b>${E(S.inv.n)||'um paciente'}</b>. Adicionar à sua lista?</p><p class="mut">Os dados vêm da família e ficam somente leitura para você.</p><div class="acts"><button class="btn ok" data-a="invok">Adicionar</button><button class="btn out" data-a="invno">Agora não</button></div>`)}
+function scrub(p,full){delete p.trash;delete p.trashAp;p.del=true;p.dx='';p.end='';p.al={};p.ct={};p.meds=[];p.vit=[];p.code='';if(full){p.n='Paciente excluído';p.age=0}save()}
+function drawQR(){const q=$('#fqr');if(!q||q.firstChild)return;try{new QRCode(q,{text:q.dataset.t,width:150,height:150,correctLevel:QRCode.CorrectLevel.M})}catch(x){q.textContent='QR Code indisponível'}}
+async function readQR(file){let txt=null;try{const bmp=await createImageBitmap(file);
+if('BarcodeDetector' in window){try{const r=await new BarcodeDetector({formats:['qr_code']}).detect(bmp);if(r[0])txt=r[0].rawValue}catch(x){}}
+if(!txt&&window.jsQR){const k=Math.min(1,1100/Math.max(bmp.width,bmp.height)),c=document.createElement('canvas');c.width=bmp.width*k;c.height=bmp.height*k;const g=c.getContext('2d');g.drawImage(bmp,0,0,c.width,c.height);const d=g.getImageData(0,0,c.width,c.height),r=jsQR(d.data,d.width,d.height);if(r)txt=r.data}}catch(x){}return txt}
+const over=a=>a.st=='and'&&Date.now()-a.ci>dh(a)*H;
+const unesc=t=>String(t).replace(/&#39;/g,"'").replace(/&quot;/g,'"').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
+const wa=(p,t)=>'https://wa.me/'+(p.ct&&p.ct.tel?'55'+unesc(p.ct.tel).replace(/\D/g,''):'')+'?text='+encodeURIComponent(t);
+const save=()=>{try{localStorage.setItem(LS+'-pac',JSON.stringify(P))}catch(x){toast('Sem espaço para salvar. Use fotos menores.')}};
+function pic(file,max,cb){const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const k=Math.min(1,max/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',.75))};i.src=r.result};r.readAsDataURL(file)}
+const hrs=a=>a.co&&a.ci?(a.co-a.ci)/H:0;
+const dh=a=>a.dur||TY[a.ty].h;
+const val=a=>a.mode=='fixo'?a.valor:hrs(a)*a.valor;
+const plan=a=>a.mode=='fixo'?a.valor:a.valor*dh(a);
+const price=(pt,ty)=>{const k=ty=='visita'?'av':ty;return (pt&&pt.v&&pt.v[k])||0};
+const saveA=()=>{try{localStorage.setItem(LS+'-ag',JSON.stringify(A))}catch(x){}};
+const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.k);toast.k=setTimeout(()=>t.classList.remove('show'),2600)};
+const modal=h=>{('#modal').innerHTML='<divclass="sheet">'+h+'</div>';('#modal').classList.add('open')};
+const close=()=>{S.lock=false;$('#modal').classList.remove('open')};
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const cpfOk=c=>{c=c.replace(/\D/g,'');if(c.length!=11||/^(\d)\1+$/.test(c))return false;for(let t=9;t<11;t++){let x=0;for(let i=0;i<t;i++)x+=c[i]*(t+1-i);if((x*10%11)%10!=c[t])return false}return true};
+const mCpf=v=>v.replace(/\D/g,'').slice(0,11).replace(/(\d{3})(\d)/,'1.2').replace(/(\d{3})(\d)/,'1.2').replace(/(\d{3})(\d{1,2})/,'1-$2');
+const mTel=v=>{v=v.replace(/\D/g,'').slice(0,11);return v.length>10?v.replace(/(\d\d)(\d{5})(\d{4})/,'($1) 2-3'):v.replace(/(\d\d)(\d{0,4})(\d{0,4})/,(m,a,b,c)=>c?`(${a}) b-{c}`:b?`(${a}) ${b}`:a)};
+const ini=n=>n.split(' ').map(x=>x[0]).slice(0,2).join('');
+const fh=h=>{const m=Math.round(h*60);return Math.floor(m/60)+'h'+String(m%60).padStart(2,'0')};
+
+function navR(){const T=S.role=='fam'?[['meu','users','Paciente'],['acomp','pulse','Acompanhar'],['busca','search','Busca']]:[['agenda','cal','Agenda'],['pac','users','Pacientes'],['busca','search','Busca'],['fin','wallet','Finanças']];
+$('#nav').innerHTML='<div class="brand">'+ic('cross',26)+'<span>CuidaCasa</span></div>'+T.map(t=>`<button class="it S.tab==t[0]?'on':''"data-a="tab"data-v="{t[0]}" aria-label="t[2]">{ic(t[1])}<span class="lb">t[2]</span></button>`).join('')+`<buttonclass="fbk"data-a="fb">{ic('flag',20)}<span class="lb">Enviar feedback / Reportar erro</span></button><button class="collapse" data-a="col" aria-label="Recolher menu">${ic('menu')}</button>`}
+
+function card(a){const t=TY[a.ty],p=P[a.p-1];let b='';
+if(a.st=='pend')b=`<button class="btn sec" data-a="conf" data-v="${a.id}">Confirmar atendimento</button>`;
+if(a.st=='conf')b=`<button class="btn ok" data-a="ci" data-v="${a.id}">Check-in no local</button>`;
+if(a.st=='and')b=`<button class="btn" data-a="co" data-v="${a.id}">Check-out</button>`;
+const reg=a.ci?`<div class="mut">Entrada hm(a.ci){a.co?' · Saída '+hm(a.co)+' · '+fh(hrs(a)):' · em curso há '+fh((Date.now()-a.ci)/H)}</div>`:'';
+const ear=(a.co?'Ganho: '+brl(val(a)):'Previsto: '+brl(plan(a)))+(a.mode=='fixo'?' (valor fixo)':' · '+brl(a.valor)+'/h');
+const ov=over(a);
+const dly=(a.st=='pend'||a.st=='conf')?`<div class="dly"><span class="mut">Avisar atraso:</span><button class="btn sec sm" data-a="dly" data-v="a.id"data-m="15">+15min</button><buttonclass="btnsecsm"data-a="dly"data-v="{a.id}" data-m="30">+30 min</button></div>`:'';
+const dc=a.delay?`<div class="dly"><span class="chip s-pend">Atraso avisado: +a.delaymin</span><aclass="chip"style="text-decoration:none"target="blank"rel="noopener"href="{wa(p,'Olá! Vou me atrasar cerca de '+a.delay+' min para o atendimento de '+unesc(p.n)+' (previsto '+a.s+'). Obrigado(a) pela compreensão.')}">Enviar no WhatsApp</a></div>`:'';
+const al=ov?`<div class="alt" role="alert">⚠ Check-out pendente: o tempo previsto (${dh(a)}h) foi excedido há ${fh((Date.now()-a.ci)/H-dh(a))}. Confirme sua saída.</div>`:'';
+if(ov)b=b.replace('class="btn"','class="btn" style="background:var(--rd);color:#fff"');
+return `<div class="card ap ov?'late':''"style="--c:{t.c}"><div class="row"><div><span class="chip t">t.l</span><h3style="margin-top:6px">{p.n}</h3><div class="mut">${a.s} · p.end</div>{reg}<div style="font-weight:700;margin-top:4px">ear</div></div><spanclass="chips-{a.st}">ST[a.st]</span></div>{al}dc{dly}<div class="acts">b<buttonclass="btnout"data-a="pat"data-v="{p.id}">Ficha</button><button class="btn out" data-a="editap" data-v="${a.id}">Editar</button></div></div>`}
+const list=(d)=>{const l=A.filter(a=>a.d==key(d)).sort((x,y)=>x.s.localeCompare(y.s));return l.length?l.map(card).join(''):'<div class="empty">Nenhum compromisso neste dia.</div>'};
+
+function vAgenda(){const d=S.date;let body='';
+const seg=`<div class="seg">${[['dia','Dia'],['sem','Semana'],['mes','Mês']].map(x=>`<button class="${S.view==x[0]?'on':''}" data-a="view" data-v="x[0]">{x[1]}</button>`).join('')}</div>`;
+const step=S.view=='mes'?30:S.view=='sem'?7:1;
+const ttl=S.view=='mes'?dl(d,{month:'long',year:'numeric'}):S.view=='sem'?'Semana de '+dl(add(d,-((d.getDay()+6)%7)),{day:'numeric',month:'short'}):dl(d,{weekday:'long',day:'numeric',month:'long'});
+const nv=`<div class="dnav"><button data-a="nav" data-v="-step"aria-label="Anterior">{ic('back')}</button><h2 style="margin:0;text-transform:capitalize">ttl</h2><buttondata-a="nav"data-v="{step}" aria-label="Próximo">${ic('fwd')}</button></div>`;
+if(S.view=='dia')body=list(d);
+if(S.view=='sem'){const m=add(d,-((d.getDay()+6)%7));body=[0,1,2,3,4,5,6].map(i=>{const x=add(m,i);return `<h3 style="margin:14px 0 8px;text-transform:capitalize">${dl(x,{weekday:'long',day:'numeric'})}</h3>`+list(x)}).join('')}
+if(S.view=='mes'){const f=new Date(d.getFullYear(),d.getMonth(),1),n=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();let c='';for(let i=0;i<(f.getDay()+6)%7;i++)c+='<span></span>';
+for(let i=1;i<=n;i++){const x=new Date(d.getFullYear(),d.getMonth(),i);c+=`<button class="${key(x)==key(d)?'sel':''} key(x)==key(TODAY)?'td':''"data-a="day"data-v="{key(x)}">i{A.some(a=>a.d==key(x))?'<i></i>':''}</button>`}
+body=`<div class="mgrid">${['S','T','Q','Q','S','S','D'].map(x=>`<b>${x}</b>`).join('')}c</div><h3style="margin-bottom:8px;text-transform:capitalize">{dl(d,{weekday:'long',day:'numeric',month:'long'})}</h3>`+list(d)}
+const od=A.filter(over),ban=od.length?`<div class="alt" role="alert" style="margin:0 0 12px">⚠ od.lengthcheck-outpendente{od.length>1?'s':''}: ${od.map(a=>P[a.p-1].n).join(', ')}</div>`:'';
+const rg=S.view=='dia'?[d,d]:S.view=='sem'?[add(d,-((d.getDay()+6)%7)),add(d,-((d.getDay()+6)%7)+6)]:[new Date(d.getFullYear(),d.getMonth(),1),new Date(d.getFullYear(),d.getMonth()+1,0)];
+const pa=A.filter(a=>a.d>=key(rg[0])&&a.d<=key(rg[1])),tot=pa.reduce((x,a)=>x+(a.co?val(a):plan(a)),0);
+const sumc=`<div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:10px"><span class="mut">pa.lengthatendimento{pa.length==1?'':'s'} no período<br>ganho + previsto</span><b style="font-size:22px">${brl(tot)}</b></div>`;
+return `<div class="top"><div><h1>Olá, esc(ME.n.split('')[0]||'profissional')</h1><divclass="mut">{esc(ME.role)}</div></div><div style="display:flex;gap:8px;align-items:center"><button class="ib" data-a="tema2" aria-label="Alternar tema claro ou escuro">${ic('moon')}</button><button class="sw S.avail?'on':''"data-a="avail"role="switch"aria-checked="{S.avail}"><i></i>S.avail?'Disponível':'Indisponível'</button></div></div>{ban}<button class="btn wide" style="margin-bottom:12px" data-a="newap">+ Novo atendimento</button>seg{nv}sumc{body}`}
+
+function vLixeira(){const L=P.filter(p=>p.trash&&!p.del&&!p.famOwner);
+return `<button class="btn out sm" data-a="pat" data-v="0" style="margin-bottom:10px">${ic('back',18)} Pacientes</button><div class="top"><h1>Lixeira</h1></div><p class="mut">Pacientes excluídos ficam aqui por 30 dias e depois são apagados de vez.</p>`+(L.length?L.map(p=>{const d=Math.max(0,30-Math.floor((Date.now()-p.trash)/864e5));return `<div class="card"><h3>${p.n}</h3><div class="mut">Excluído em ${dl(p.trash,{day:'2-digit',month:'short'})} · apaga em ddia{d==1?'':'s'}</div><div class="acts"><button class="btn ok" data-a="restore" data-v="p.id">Restaurar</button><buttonclass="btnout"data-a="askdel"data-k="perm"data-v="{p.id}">Apagar de vez</button></div></div>`}).join(''):'<div class="empty">A lixeira está vazia.</div>')}
+function vPacs(){if(S.pat=='trash')return vLixeira();if(S.pat=='new')return vNovo();if(S.pat)return vFicha(P[S.pat-1]);return `<div class="top"><h1>Pacientes</h1><div class="dly" style="margin:0"><button class="btn sec sm" data-a="addcode">Adicionar por código</button><button class="btn sm" data-a="newpac">+ Novo paciente</button></div></div>`+P.filter(vis).map(p=>`<button class="card" style="width:100%;text-align:left;display:block" data-a="pat" data-v="p.id"><divclass="row"><div><h3>{p.n}, ${p.age} p.age<12?'anos':'anos'</h3><divclass="mut">{p.dx}</div><div class="mut">p.end</div>{lk(p)?'<span class="chip" style="margin-top:6px">🔒 Cadastrado pela família</span>':''}</div><span class="chip" style="background:var(--rdS);color:var(--rd)">Object.values(p.al).flat().lengthalergias</span></div></button>`).join('')+`<buttonclass="btnoutwide"style="margin-top:6px"data-a="lixo">Lixeira({P.filter(p=>p.trash&&!p.del&&!p.famOwner).length})</button>`}
+
+function vFicha(p){const al=Object.entries(p.al).map(([k,v])=>`${v.map(x=>`<span>${x}</span>`).join('')}`).join('');
+const ea=Object.entries(p.al).filter(e=>e[1].length);
+const alg=!ea.length?'<div class="alg" style="background:#52687A">Nenhuma alergia informada. Confirme com a família.</div>':`<div class="alg" role="alert"><b>⚠ ALERGIAS</b>${ea.map(([k,v])=>`<div style="margin-top:4px;font-size:13px;opacity:.9">${k}</div>${v.map(x=>`<span>${x}</span>`).join('')}`).join('')}</div>`;
+return `<div class="hc"><button class="btn out sm" data-a="pat" data-v="0" style="margin-bottom:10px">ic('back',18)Pacientes</button>{alg}<h1>${p.n}, p.ageanos</h1><divclass="mut"style="margin-bottom:12px">{p.dx} · p.end</div>{p.dep?'<span class="chip">'+p.dep+'</span>':''}<div class="mut" style="margin:8px 0 12px">Combinado com a família: [['12h','p12'],['24h','p24'],['visita','visita']].filter(x=>price(p,x[1])).map(x=>x[0]+''+brl(price(p,x[1]))).join('·')||'valoresaindanãocombinados'</div>{lk(p)?`<div class="chip" style="display:block;margin-bottom:8px">🔒 Cadastrado pela família: somente leitura</div><div class="dly" style="margin:0 0 12px"><button class="btn sec sm" data-a="editvals" data-v="p.id">Editarmeusvalores</button><buttonclass="btnoutsm"data-a="askdel"data-k="unlink"data-v="{p.id}">Remover da minha lista</button></div>`:`<div class="dly" style="margin:0 0 12px"><button class="btn sec sm" data-a="editpac" data-v="p.id">Editarpaciente</button><buttonclass="btnoutsm"data-a="askdel"data-k="trash"data-v="{p.id}">Excluir paciente</button></div>`}${p.ct?`<div class="card" style="margin-top:12px"><h3>Contato de emergência</h3><div>${p.ct.n||'Familiar'}p.ct.par?'('+p.ct.par+')':''</div><divclass="acts"><aclass="btnok"style="text-decoration:none"href="tel:{p.ct.tel.replace(/\D/g,'')}">Ligar ${p.ct.tel}</a></div></div>`:''}
+<div class="two"><div><div class="card"><h3 style="margin-bottom:6px">Medicação de hoje</h3>${p.meds.map((m,i)=>`<div class="med ${m.done?'done':''}"><input type="checkbox" m.done?'checked':''data-a="med"data-p="{p.id}" data-v="${i}" aria-label="Administrado: m.n"><divclass="nm">{m.n}<div class="mut" style="font-weight:400">${m.d} · m.t{m.done?' · feito às '+hm(m.done):''}</div></div>${lk(p)?'':`<button class="ib" data-a="editmed" data-p="${p.id}" data-v="i"aria-label="Editarmedicamento">{ic('edit')}</button>`}<button class="ib" data-a="rx" data-p="p.id"data-v="{i}" aria-label="m.rx?'Verreceitaanexada':'Anexarreceita'">{ic('doc')}${m.rx?'<span class="dot"></span>':''}</button></div>`).join('')}${p.meds.length?'':'<p class="mut">Nenhum medicamento cadastrado.</p>'}${lk(p)?'':`<button class="btn sec wide" style="margin-top:10px" data-a="addmed" data-v="${p.id}">+ Adicionar medicamento</button>`}</div></div>
+<div><div class="card"><h3 style="margin-bottom:10px">Sinais vitais do turno</h3><div class="fg"><div><label for="pa">Pressão (mmHg)</label><input id="pa" type="text" placeholder="120/80"></div><div><label for="gl">Glicemia (mg/dL)</label><input id="gl" type="number" placeholder="98"></div><div><label for="tp">Temperatura (°C)</label><input id="tp" type="number" step=".1" placeholder="36.5"></div><div></div><div class="full"><label for="ob">Observações</label><textarea id="ob" rows="3" placeholder="Como o paciente passou o turno?"></textarea></div><div class="full"><button class="btn ok wide" data-a="vit" data-v="${p.id}">Salvar registro</button></div></div></div>
+${p.vit.length?`<div class="card"><h3>Registros</h3>${p.vit.map(v=>`<div class="med" style="display:block"><b>${v.t}</b> · PA ${v.pa||'–'} · Glic ${v.gl||'–'} · v.tp||'–'°C{v.ob?`<div class="mut">${v.ob}</div>`:''}</div>`).join('')}</div>`:''}</div></div></div>`}
+
+function chips(c){return S.np.al[c].map((x,i)=>`<span class="chip" style="background:var(--rdS);color:var(--rd)">x<buttonclass="xb"data-a="delal"data-c="{c}" data-v="${i}" aria-label="Remover ${x}">×</button></span>`).join(' ')}
+function mchips(){return S.np.meds.map((m,i)=>`<span class="chip">m.n{m.d?' '+m.d:''} · m.t<buttonclass="xb"data-a="delm2"data-v="{i}" aria-label="Remover ${m.n}">×</button></span>`).join(' ')}
+function vNovo(){const E=S.np.id?P[S.np.id-1]:null,ed=!!E,ct=(E&&E.ct)||{},fam=S.role=='fam';
+const f=(id,l,ex,c,v)=>`<div class="c==null?'full':c"><labelfor="n-{id}">l</label><inputid="n-{id}" type="text" value="${v==null?'':v}" ${ex||''}></div>`;
+const AC={Medicamentos:'Ex.: Dipirona',Materiais:'Ex.: Látex',Alimentos:'Ex.: Camarão'};
+const nv=(id,l,k,c)=>`<div class="c||''"><labelfor="n-{id}">l</label><inputid="n-{id}" type="number" min="0" value="${price(E,k)||''}"></div>`;
+return `${fam?(ed?'<button class="btn out sm" data-a="cancelnp" style="margin-bottom:10px">Cancelar edição</button>':''):`<button class="btn out sm" data-a="pat" data-v="${ed?E.id:0}" style="margin-bottom:10px">${ic('back',18)} ${ed?'Ficha':'Pacientes'}</button>`}<div class="card"><h2 style="margin:0 0 4px">${ed?'Editar paciente':fam?'Cadastre o paciente':'Cadastrar paciente'}</h2><p class="mut" style="margin:0 0 14px">fam?'Preenchaumavez.Oprofissionalqueatenderveráestesdados,masnãopoderáalterá-los.':'Pacientecriadoporvocê:vocêpodeeditarquandoquiser.'</p><h3style="margin-bottom:8px">Identificação</h3><divclass="fg">{f('nome','Nome completo','autocomplete="off"',null,ed?E.n:'')}f('idade','Idade(anos)','inputmode="numeric"','',ed?E.age:'')<div><labelfor="n-dep">Níveldedependência</label><selectid="n-dep">{['Independente','Dependência parcial','Dependência total'].map(x=>`<option ed&&E.dep==x?'selected':''>{x}</option>`).join('')}</select></div>f('end','Endereçodoatendimento','',null,ed?E.end:''){f('dx','Diagnóstico principal','',null,ed?E.dx:'')}</div>
+<h3 style="margin:18px 0 8px">Contato de emergência</h3><div class="fg">f('cn','Familiarresponsável','',null,ct.n){f('cp','Parentesco','placeholder="Filha, esposo..."','',ct.par)}${f('ct','Telefone / WhatsApp','inputmode="tel" placeholder="(41) 99999-9999"','',ct.tel)}</div>
+${fam?'':`<h3 style="margin:18px 0 8px">Valores combinados com a família (R$)</h3><div class="fg">nv('v12','Plantão12h','p12'){nv('v24','Plantão 24h','p24')}${nv('vav','Visita / procedimento avulso','visita','full')}</div>`}
+<h3 style="margin:18px 0 8px">Alergias</h3>${Object.keys(AC).map(c=>`<div style="margin-bottom:12px"><label for="al-${c}">c</label><divclass="fbar"><inputid="al-{c}" class="alin" data-c="c"type="text"placeholder="{AC[c]}"><button class="btn sec" data-a="addal" data-c="c">Adicionar</button></div><divid="chips-{c}" style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">${chips(c)}</div></div>`).join('')}
+${fam?`<h3 style="margin:18px 0 8px">Medicamentos de uso diário</h3><div class="fg"><div class="full"><label for="n-mn">Nome</label><input id="n-mn" type="text"></div><div><label for="n-md">Dose</label><input id="n-md" type="text" placeholder="50 mg"></div><div><label for="n-mt">Horário</label><input id="n-mt" type="time" value="08:00"></div><div class="full"><button class="btn sec wide" data-a="addm2">Adicionar medicamento</button></div></div><div id="mchips" style="margin:8px 0 0;display:flex;gap:6px;flex-wrap:wrap">${mchips()}</div>${ed?'':'<label class="chk" style="margin-top:14px"><input type="checkbox" id="n-cons"> Autorizo que o profissional que me atende veja estes dados de saúde. Ele poderá ler, mas não alterar.</label>'}`:''}<div class="acts"><button class="btn ok" data-a="savepac">${ed?'Salvar alterações':'Cadastrar paciente'}</button></div></div>`}
+function apForm(a){const n=!a.id;
+const sel=(id,o,v)=>`<select id="id">{o.map(x=>`<option value="${x[0]}" x[0]==v?'selected':''>{x[1]}</option>`).join('')}</select>`;
+const dt=ms=>ms?key(ms)+'T'+new Date(ms).toTimeString().slice(0,5):'';
+const tm=a.ci||a.co?`<div class="full"><label for="e-ci">Entrada (check-in)</label><input id="e-ci" type="datetime-local" value="dt(a.ci)"></div><divclass="full"><labelfor="e-co">Saída(check-out)</label><inputid="e-co"type="datetime-local"value="{dt(a.co)}"></div>`:'';
+return `<h2 style="margin-top:0">n?'Novoatendimento':'Editaratendimento'</h2><divclass="fg"><divclass="full"><labelfor="e-p">Paciente</label>{sel('e-p',P.filter(p=>vis(p)||p.id==a.p).map(p=>[p.id,p.n]),a.p)}</div><div><label for="e-d">Data</label><input id="e-d" type="date" value="a.d"></div><div><labelfor="e-s">Início</label><inputid="e-s"type="time"value="{a.s}"></div><div class="full"><label for="e-ty">Tipo</label>sel('e-ty',[['p12','Plantão12h'],['p24','Plantão24h'],['visita','Visitapontual']],a.ty)</div><divclass="full"><labelfor="e-m">Comovocêcobra</label>{sel('e-m',[['fixo','Valor fixo do plantão'],['hora','Valor por hora']],a.mode)}</div><div><label for="e-v">Valor (R)</label><inputid="e-v"type="number"min="0"step="0.01"value="{a.valor==null?'':a.valor}"></div><div><label for="e-dur">Duração (h)</label><input id="e-dur" type="number" min="0.5" step="0.5" value="dh(a)"></div>{tm}</div><div id="e-pv" class="card" style="margin:12px 0 0;background:var(--aqS)"></div><div class="acts"><button class="btn ok" data-a="saveap" data-v="a.id||''">Salvar</button><buttonclass="btnout"data-a="close">Cancelar</button>{n?'':`<button class="btn out" style="color:var(--rd)" data-a="delap" data-v="${a.id}">Excluir</button>`}</div>`}
+function epv(){const g=x=>$('#e-'+x),ty=g('ty').value,dur=g('dur');dur.disabled=ty!='visita';if(dur.disabled)dur.value=TY[ty].h;
+const v=+g('v').value||0,m=g('m').value,h=+dur.value||TY[ty].h,tot=m=='fixo'?v:v*h;
+g('pv').innerHTML=!v?'<span class="mut">Informe o valor combinado com a família para ver quanto você recebe.</span>':`<span class="mut">Você recebe por este atendimento</span><b style="font-size:22px;display:block">brl(tot)</b><spanclass="mut">{m=='fixo'?'Valor fixo, independente das horas trabalhadas.':brl(v)+'/h × '+h+'h previstas. Ao fechar, vale o tempo real entre check-in e check-out.'}</span>`}
+function vMeu(){const p=P.find(x=>x.id==S.fid);if(!p&&!S.np)S.np={al:{Medicamentos:[],Materiais:[],Alimentos:[]},meds:[]};
+if(S.np)return vNovo();
+if(p&&p.trash){const d=Math.max(0,30-Math.floor((Date.now()-p.trash)/864e5));return `<div class="top"><h1>Meu paciente</h1></div><div class="card"><h3>Cadastro na lixeira</h3><p class="mut">O cadastro de ${p.n} foi excluído e some de vez em ddia{d==1?'':'s'}. Enquanto isso, você pode restaurar.</p><div class="acts"><button class="btn ok" data-a="restore" data-v="p.id">Restaurarcadastro</button><buttonclass="btnout"data-a="askdel"data-k="famperm"data-v="{p.id}">Apagar de vez</button></div></div>${themeSeg()}<button class="btn out wide" style="margin-top:14px" data-a="logout">Sair da conta</button>`}
+const al=Object.entries(p.al).filter(e=>e[1].length).map(e=>`<div class="mut" style="margin-top:6px">e[0]</div>`+e[1].map(x=>`<spanclass="chip"style="background:var(--rdS);color:var(--rd);margin-right:4px">{x}</span>`).join('')).join('');
+if(!p.code){p.code=genCode();save()}
+const msg='Olá! Segue o cadastro de '+unesc(p.n)+' no CuidaCasa. Abra o link, entre como profissional e toque em Adicionar: '+invLink(p);
+const sh=`<div class="card"><h3>Compartilhar com o profissional</h3><p class="mut" style="margin:4px 0 10px">O profissional só vê o paciente depois de adicionar este código ou ler este QR Code.</p><div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap"><div id="fqr" data-t="CUIDACASA:p.code"style="background:#fff;color:#222;padding:8px;border-radius:12px;min-height:60px;min-width:60px"></div><div><divclass="mut">Código</div><divstyle="font-size:26px;font-weight:700;letter-spacing:2px">{p.code}</div><button class="btn sec sm" data-a="copycode" data-v="p.code"style="margin-top:8px">Copiarcódigo</button></div></div><aclass="btnwide"style="margin-top:12px;text-decoration:none"target="blank"rel="noopener"href="https://wa.me/?text={encodeURIComponent(msg)}">Enviar link pelo WhatsApp</a><p class="mut" style="margin:8px 0 0">Se o profissional usa outro aparelho, envie o link: ele leva os dados do cadastro.</p></div>`;
+return `<div class="top"><h1>Meu paciente</h1><button class="btn sm" data-a="editpac" data-v="p.id">Editardados</button></div><divclass="card"><h2style="margin:0">{p.n}, p.ageanos</h2><divclass="mut">{p.dx} · p.end</div><divstyle="margin-top:8px"><spanclass="chip">{p.dep}</span></div></div><div class="card"><h3>Alergias</h3>al||'<pclass="mut">Nenhumainformada.</p>'</div><divclass="card"><h3>Contatodeemergência</h3><div>{p.ct.n||''} ${p.ct.par?'('+p.ct.par+')':''} · p.ct.tel</div></div><divclass="card"><h3>Medicamentos</h3>{p.meds.length?p.meds.map(m=>`<div class="med"><div class="nm">m.n<divclass="mut"style="font-weight:400">{m.d} · ${m.t}</div></div></div>`).join(''):'<p class="mut">Nenhum informado.</p>'}</div>${sh}<p class="mut">O profissional que atender verá estes dados, mas não poderá alterá-los. Só você edita.</p><button class="btn wide" data-a="tab" data-v="busca">Buscar profissional</button><button class="btn out wide" style="margin-top:10px" data-a="fb">Enviar feedback / Reportar erro</button>themeSeg()<buttonclass="btnoutwide"style="margin-top:14px"data-a="askdel"data-k="famtrash"data-v="{p.id}">Excluir cadastro do paciente</button><button class="btn out wide" style="margin-top:10px" data-a="logout">Sair da conta</button>`}
+function vAcomp(){const p=P.find(x=>x.id==S.fid);
+if(!p)return `<div class="top"><h1>Acompanhamento</h1></div><div class="empty">Cadastre o paciente na aba Paciente para acompanhar por aqui.</div>`;
+const mine=A.filter(a=>a.p==p.id).sort((x,y)=>(x.d+x.s).localeCompare(y.d+y.s)),cur=mine.find(a=>a.st=='and'),nx=mine.find(a=>!a.co&&a.st!='and'&&a.d>=key(TODAY)),hist=mine.filter(a=>a.co).reverse().slice(0,5);
+const nowS=new Date().toTimeString().slice(0,5),who=esc(ME.n||'O profissional'),meds=[...p.meds].sort((x,y)=>x.t.localeCompare(y.t)),al=[];
+if(cur&&over(cur))al.push('O plantão passou do tempo previsto e o check-out ainda não foi confirmado.');
+if(nx&&nx.delay)al.push(`Atraso avisado: o profissional chega cerca de ${nx.delay} min depois das ${nx.s}.`);
+meds.filter(m=>!m.done&&m.t<nowS).forEach(m=>al.push(`Medicação sem confirmação: m.n({m.t}).`));
+const st=cur?`<span class="chip s-and">Em atendimento</span><h3 style="margin-top:6px">${who} está no local</h3><div class="mut">Chegou às ${hm(cur.ci)} · há fh((Date.now()-cur.ci)/H)</div>`:nx?`<spanclass="chips-conf">Próximoatendimento</span><h3style="margin-top:6px;text-transform:capitalize">{dl(nx.d+'T00:00',{weekday:'long',day:'numeric',month:'long'})}, nx.s</h3><divclass="mut">{TY[nx.ty].l} · ${ST[nx.st]}</div>`:'<div class="mut">Nenhum atendimento agendado. Quando o profissional agendar, você acompanha por aqui.</div>';
+const mr=meds.map(m=>{const ok=!!m.done,late=!ok&&m.t<nowS;return `<div class="med"><div class="nm">m.n<divclass="mut"style="font-weight:400">{m.d} · ${m.t}</div></div><span class="chip ${ok?'s-conc':late?'':'s-pend'}" late?'style="background:var(--rdS);color:var(--rd)"':''>{ok?'✓ '+hm(m.done):late?'Atrasada':'Pendente'}</span></div>`}).join('');
+return `<div class="top"><div><h1>Acompanhamento</h1><div class="mut">${p.n} · atualizado às ${hm(Date.now())}</div></div><button class="btn out sm" data-a="refresh">Atualizar</button></div>
+${al.length?`<div class="card" style="border:2px solid var(--rd)"><h3>Alertas</h3>${al.map(x=>`<div style="margin-top:6px">⚠ ${x}</div>`).join('')}</div>`:''}
+<div class="two"><div><div class="card">${st}</div><div class="card"><h3>Medicação de hoje · ${meds.filter(m=>m.done).length} de meds.length</h3>{mr||'<p class="mut">Nenhum medicamento cadastrado.</p>'}</div></div>
+<div><div class="card"><h3 style="margin-bottom:6px">Sinais vitais registrados</h3>${p.vit.length?p.vit.slice(0,5).map(v=>`<div class="med" style="display:block"><b>${v.ts?dl(v.ts,{day:'2-digit',month:'short'})+' · ':''}${v.t}</b> · PA ${v.pa||'–'} · Glic ${v.gl||'–'} · v.tp||'–'°C{v.ob?`<div class="mut">${v.ob}</div>`:''}</div>`).join(''):'<p class="mut">Ainda não há registros do profissional.</p>'}<p class="mut" style="margin:8px 0 0">Os valores são do registro do profissional. Dúvidas sobre eles, fale com ele.</p></div>
+<div class="card"><h3 style="margin-bottom:6px">Últimas visitas</h3>${hist.length?hist.map(a=>`<div class="med" style="display:block"><b>${dl(a.ci,{day:'2-digit',month:'short'})}</b> · ${hm(a.ci)} às ${hm(a.co)} · ${fh(hrs(a))} · ${TY[a.ty].l}</div>`).join(''):'<p class="mut">Nenhuma visita concluída ainda.</p>'}</div></div></div>`}
+function lgpd(){S.lock=true;modal(`<h2 style="margin-top:0">Dados sensíveis de saúde</h2><p>A ficha do paciente reúne informações de saúde, que a LGPD (Lei 13.709/2018) trata como dados pessoais sensíveis.</p><p>Use esses dados só para o cuidado deste paciente. Não compartilhe em grupos ou redes sociais e evite capturas de tela.</p><label class="chk" style="margin-bottom:12px"><input type="checkbox" id="lg"> Li e concordo</label><div class="acts"><button class="btn ok" data-a="lgok">Continuar</button><button class="btn out" data-a="lgno">Voltar</button></div>`)}
+function stars(r){return `<span class="star">★ ${r.toFixed(1).replace('.',',')}</span>`}
+function vBusca(){const q=S.q;let res='';
+if(q.run){const dt=new Date(q.d+'T'+q.t),wd=dt.getDay(),h=dt.getHours()+dt.getMinutes()/60;
+const r=NU.filter(n=>n.sp.includes(q.sp)&&n.km<=q.km&&n.days.includes(wd)&&h>=n.h[0]&&h<n.h[1]);
+res=`<h2>r.lengthprofissional(is)disponível(is)</h2>`+(r.length?r.map(n=>`<buttonclass="card"style="width:100%;text-align:left;display:flex;gap:12px;align-items:center"data-a="nurse"data-v="{NU.indexOf(n)}"><div class="av">ini(n.n)</div><divstyle="flex:1"><h3>{n.n}</h3><div class="mut">${n.role} · n.km.toString().replace('.',',')km</div><div>{stars(n.r)} <span class="mut">(${n.rv})</span> <span class="coren">✓ COREN</span></div></div></button>`).join(''):'<div class="empty">Ninguém atende nesse dia, horário e raio. Tente ampliar o raio ou mudar o horário.</div>')}
+return `<div class="top"><h1>Buscar profissional</h1></div><div class="card"><p class="mut" style="margin-top:0">Os perfis são privados: aparecem só quando a especialidade, o local e o horário combinam com a agenda do profissional.</p><div class="fg"><div class="full"><label for="sp">Especialidade</label><select id="sp">${['Geriatria','Pediatria','Curativos'].map(x=>`<option q.sp==x?'selected':''>{x}</option>`).join('')}</select></div><div class="full"><label for="km">Raio: <span id="kmv">q.km</span>km</label><inputid="km"type="range"min="1"max="30"value="{q.km}"></div><div><label for="dd">Data</label><input id="dd" type="date" value="q.d"></div><div><labelfor="tt">Horário</label><inputid="tt"type="time"value="{q.t}"></div><div class="full"><button class="btn wide" data-a="find">Buscar profissionais</button></div></div></div>${res}`}
+
+function vFin(){const sub=`<div class="seg"><button class="S.fsub=='fin'?'on':''"data-a="fsub"data-v="fin">Finanças</button><buttonclass="{S.fsub=='perf'?'on':''}" data-a="fsub" data-v="perf">Meu perfil</button></div>`;
+if(S.fsub=='perf')return `<div class="top"><h1>Meu perfil</h1></div>sub{S.edit?vForm():perfil(ME,true)}`;
+const AL=A.filter(a=>a.co).sort((x,y)=>y.co-x.co),R=AL.filter(a=>{const d=new Date(a.ci);return d.getFullYear()==S.fy&&(S.fm<0||d.getMonth()==S.fm)}),pg=R.filter(a=>a.paid).reduce((s,a)=>s+val(a),0),rc=R.filter(a=>!a.paid).reduce((s,a)=>s+val(a),0),ac=AL.filter(a=>new Date(a.ci).getFullYear()==S.fy).reduce((s,a)=>s+val(a),0),pv=A.filter(a=>{if(a.co)return false;const d=new Date(a.d+'T00:00');return d.getFullYear()==S.fy&&(S.fm<0||d.getMonth()==S.fm)}).reduce((x,a)=>x+plan(a),0),yrs=[...new Set([TODAY.getFullYear(),...AL.map(a=>new Date(a.ci).getFullYear())])].sort((a,b)=>b-a),MS=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const flt=`<div class="fg" style="margin-bottom:12px"><div><label for="fm">Mês</label><select id="fm"><option value="-1" S.fm<0?'selected':''>Anotodo</option>{MS.map((m,i)=>`<option value="${i}" S.fm==i?'selected':''>{m}</option>`).join('')}</select></div><div><label for="fy">Ano</label><select id="fy">${yrs.map(y=>`<option y==S.fy?'selected':''>{y}</option>`).join('')}</select></div></div>`;
+return `<div class="top"><h1>Finanças</h1></div>sub{flt}<div class="sum"><div class="card"><span class="mut">A receber</span><b>brl(rc)</b></div><divclass="card"><spanclass="mut">Recebido</span><b>{brl(pg)}</b></div><div class="card"><span class="mut">Previsto (agendado)</span><b>${brl(pv)}</b></div><div class="card"><span class="mut">Acumulado em S.fy</span><b>{brl(ac)}</b></div></div><p class="mut">O valor é calculado pelo tempo entre check-in e check-out. O pagamento é feito direto pelo paciente; aqui você só dá baixa.</p>`+(R.length?R.map(a=>`<div class="card"><div class="row"><div><h3>P[a.p-1].n</h3><divclass="mut">{dl(a.ci,{day:'2-digit',month:'short'})} · ${hm(a.ci)} às ${hm(a.co)} · TY[a.ty].l</div><divclass="mut">{fh(hrs(a))} · a.mode=='fixo'?'valorfixo':brl(a.valor)+'/h'</div></div><divstyle="text-align:right"><bstyle="font-size:19px">{brl(val(a))}</b><br><span class="chip a.paid?'s-conc':'s-pend'">{a.paid?'Pago via '+a.paid:'A receber'}</span></div></div><div class="acts">${a.paid?'':`<button class="btn ok" data-a="pay" data-v="${a.id}">Marcar como pago</button>`}<button class="btn out" data-a="rec" data-v="a.id">{ic('doc',18)} Recibo</button><button class="btn out" data-a="editap" data-v="${a.id}">Editar</button></div></div>`).join(''):'<div class="empty">Nenhum atendimento concluído neste período.</div>')}
+
+function dados(){const m=ME.cpf?'***.'+ME.cpf.slice(4,7)+'.'+ME.cpf.slice(8,11)+'-**':'';
+const R=[['CPF',m],['RG',ME.rg?ME.rg+(ME.rgOrg?' · '+ME.rgOrg:''):''],['Nascimento',ME.nasc?dl(ME.nasc+'T00:00'):''],['Telefone',ME.tel],['E-mail',ME.email],['Cidade',ME.cidade]];
+return `<div class="card"><div class="row" style="align-items:center"><h3>Dados pessoais</h3><button class="btn sec sm" data-a="edit">Editar dados</button></div><table>${R.map(r=>`<tr><td class="mut">${r[0]}</td><td>${esc(r[1])||'–'}</td></tr>`).join('')}</table></div>`}
+function vForm(){const done=ME.n&&ME.cpf&&ME.coren;
+const f=(id,l,v,ex,c)=>`<div class="c||'full'"><labelfor="f-{id}">l</label><inputid="f-{id}" type="text" value="${esc(v)}" ${ex||''}></div>`;
+const SP=['Geriatria','Pediatria','Curativos','Pós-operatório','Cuidados paliativos'];
+return `<div class="card"><h2 style="margin:0 0 4px">done?'Editarmeusdados':'Completeseucadastro'</h2><pclass="mut"style="margin:0014px">{done?'Atualize quando precisar.':'Preencha uma vez. CPF e COREN saem no recibo de reembolso.'}</p>
+<h3 style="margin-bottom:8px">Dados pessoais</h3><div class="fg"><div class="full" style="display:flex;align-items:center;gap:14px"><div id="fprev" class="av" style="width:72px;height:72px;font-size:26pxME.foto?';background:url('+ME.foto+')center/cover':''">{ME.foto?'':esc(ini(ME.n||'?'))}</div><label class="btn sec" style="cursor:pointer">Escolher foto<input id="f-foto" type="file" accept="image/*" hidden></label></div>f('n','Nomecompleto',ME.n,'autocomplete="name"'){f('cpf','CPF',ME.cpf,'inputmode="numeric" placeholder="000.000.000-00" maxlength="14"')}f('rg','RG',ME.rg,'inputmode="numeric"',''){f('org','Órgão emissor',ME.rgOrg,'placeholder="SSP/PR"','')}f('nasc','Nascimento',ME.nasc,'','').replace('type="text"','type="date"'){f('tel','Telefone / WhatsApp',ME.tel,'inputmode="tel" placeholder="(41) 99999-9999"','')}f('em','E-mail',ME.email,'inputmode="email"autocomplete="email"'){f('cid','Cidade / UF',ME.cidade,'placeholder="Colombo/PR"')}</div>
+<p class="mut" style="margin:6px 0 0">Seus dados ficam salvos só neste navegador.</p>
+<h3 style="margin:18px 0 8px">Dados profissionais</h3><div class="fg"><div class="full"><label for="f-cat">Categoria</label><select id="f-cat">${['Enfermeiro(a)','Técnico(a) de Enfermagem','Auxiliar de Enfermagem'].map(x=>`<option ME.role==x?'selected':''>{x}</option>`).join('')}</select></div>f('coren','NºdoCOREN',ME.coren,'placeholder="PR-123456-TEC"')<divclass="full"><label>Especialidades</label><divclass="chks">{SP.map(x=>`<label class="chk"><input type="checkbox" class="spc" value="${x}" ${ME.sp.includes(x)?'checked':''}> ${x}</label>`).join('')}</div></div></div>
+<p class="mut" style="margin:18px 0 0">Seus valores não aparecem no perfil. Você combina o valor direto com cada família, porque ele muda com distância, horário e tipo de cuidado.</p><div class="acts"><button class="btn ok" data-a="saveperf">Salvar dados</button>${done?'<button class="btn out" data-a="cancel">Cancelar</button>':''}</div></div>`}
+function perfil(n,own){return `<div class="card"><div style="display:flex;gap:14px;align-items:center"><div class="av" style="width:72px;height:72px;font-size:26pxn.foto?';background:url('+n.foto+')center/cover':''">{n.foto?'':esc(ini(n.n))}</div><div><h2 style="margin:0">esc(n.n)</h2><divclass="mut">{esc(n.role)}</div><div style="margin-top:4px">own?(n.coren?'<spanclass="chips-pend">CORENinformado</span>':''):'<spanclass="coren">✓CORENvalidado</span>'<spanclass="mut">{esc(n.coren)}</span></div></div></div><div style="margin:12px 0">n.rv?stars(n.r)+'<spanclass="mut">'+n.rv+'avaliações</span>':'<spanclass="mut">Semavaliaçõesainda</span>'</div><div>{n.sp.map(s=>`<span class="chip" style="margin-right:6px">${s}</span>`).join('')}</div></div>
+${own?dados():''}
+${own?`<button class="btn wide" data-a="share">${ic('share',20)} Compartilhar perfil (WhatsApp / QR Code)</button><button class="btn out wide" style="margin-top:10px" data-a="logout">Sair da contaS.user&&S.user.e?'('+S.user.e+')':''</button><buttonclass="btnoutwide"style="margin-top:10px"data-a="fb">Enviarfeedback/Reportarerro</button>{themeSeg()}`:''}`}
+
+function recibo(a){const p=P[a.p-1];return `<h2 style="margin-top:0">Recibo de prestação de serviço</h2><div class="rcp"><p><b>Profissional:</b> esc(ME.n)<br>{esc(ME.role)}<br>COREN ${esc(ME.coren)} · CPF ${esc(ME.cpf)}</p><p><b>Paciente:</b> p.n<br>{p.end}</p><p><b>Serviço:</b> TY[a.ty].l<br>{dl(a.ci,{day:'2-digit',month:'long',year:'numeric'})}, das ${hm(a.ci)} às hm(a.co)({fh(hrs(a))})</p><p><b>Valor:</b> ${brl(val(a))}<br><b>Forma de pagamento:</b> ${a.paid?a.paid:'a receber'}</p><p class="mut" style="margin-bottom:0">Documento para pedido de reembolso ao plano de saúde.</p></div><div class="acts noprint"><button class="btn" data-a="print">Imprimir ou salvar PDF</button><button class="btn out" data-a="close">Fechar</button></div>`}
+
+const GOOGLE_CLIENT_ID='';
+function enter(u){S.user=u;S.pat=null;S.np=null;if(S.role=='fam'){S.tab='meu';return}if(!ME.n)ME.n=u.n||'';if(!ME.email)ME.email=u.e||'';if(!(ME.n&&ME.cpf&&ME.coren)){S.tab='fin';S.fsub='perf';S.edit=true}}
+function vLogin(){return `<div class="login"><div class="logo">ic('cross',40)</div><div><h1>CuidaCasa</h1><pclass="mut"style="margin:4px00">Gestãodeenfermagememhomecare</p></div><divclass="seg"style="margin:0"><buttonclass="{S.role!='fam'?'on':''}" data-a="role" data-v="prof">Sou profissional</button><button class="S.role=='fam'?'on':''"data-a="role"data-v="fam">Soudafamília</button></div><divid="gbtn"style="display:grid;place-items:center"></div><buttonclass="btngbtnwidegfall"data-a="glogin"><bstyle="font-size:21px;color:#4285F4">G</b>EntrarcomGoogle</button><buttonclass="btnsecwide"data-a="demo">Entraremmododemonstração</button><pclass="mut"style="margin:0">Omododemonstraçãousadadosdeexemplo.Oquevocêpreencherficasalvosónestenavegador.</p>{themeSeg()}</div>`}
+function renderG(){if(!GOOGLE_CLIENT_ID||!window.google)return;google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:r=>{try{const b=r.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'),p=JSON.parse(decodeURIComponent(escape(atob(b))));enter({n:p.name||'',e:p.email});render()}catch(x){toast('Não foi possível entrar com o Google')}}});google.accounts.id.renderButton(('#gbtn'),theme:'outline',size:'large',width:300,text:'signinwith',locale:'pt-BR');('.gfall').style.display='none'}
+function render(){$('#app').classList.toggle('out',!S.user);if(!S.user){$('#main').innerHTML=vLogin();renderG();return}navR();('#app').classList.toggle('col',S.col);('#main').innerHTML={agenda:vAgenda,pac:vPacs,busca:vBusca,fin:vFin,meu:vMeu,acomp:vAcomp}[S.tab]();drawQR()}
+
+document.addEventListener('click',e=>{const t=e.target.closest('[data-a]');
+if(e.target.id=='modal'){if(!S.lock)close();return}
+if(!t)return;const a=t.dataset.a,v=t.dataset.v,id=+v;
+const ap=A.find(x=>x.id==id);
+switch(a){
+case'demo':enter({n:'',e:''});break;
+case'edit':S.edit=true;S.fsub='perf';S.tab='fin';break;
+case'cancel':S.edit=false;break;
+case'glogin':toast('O login real do Google precisa do app no seu domínio, com um Client ID. Por ora, use o modo demonstração.');return;
+case'logout':S.user=null;S.edit=false;S.np=null;S.tab='agenda';S.pat=null;break;
+case'tab':S.tab=v;S.pat=null;S.np=null;break;
+case'dly':ap.delay=(ap.delay||0)+ +t.dataset.m;toast('Atraso de +'+t.dataset.m+' min registrado');break;
+case'col':S.col=!S.col;break;
+case'view':S.view=v;break;
+case'nav':S.date=S.view=='mes'?new Date(S.date.getFullYear(),S.date.getMonth()+Math.sign(id),1):add(S.date,id);break;
+case'day':S.date=D0(v+'T00:00');break;
+case'avail':S.avail=!S.avail;toast(S.avail?'Você está disponível para novos atendimentos':'Você está indisponível');break;
+case'conf':ap.st='conf';toast('Atendimento confirmado');break;
+case'ci':ap.st='and';ap.ci=Date.now();toast('Check-in registrado às '+hm(ap.ci));break;
+case'co':ap.st='conc';ap.co=Date.now();toast('Check-out às '+hm(ap.co)+' · '+brl(val(ap))+' a receber');break;
+case'pat':if(id&&(P[id-1].del||P[id-1].trash)){toast('Paciente excluído');return}S.tab='pac';S.pat=id||null;scrollTo(0,0);break;
+case'med':{const m=P[+t.dataset.p-1].meds[id];m.done=t.checked?Date.now():null;save();toast(t.checked?m.n+' administrado às '+hm(m.done):'Marcação removida');break}
+case'rx':{const p=P[+t.dataset.p-1],m=p.meds[id];
+const up=`<label class="btn m.rx?'out':''wide"style="margin-top:10px;cursor:pointer">{m.rx?'Trocar foto da receita':'Anexar foto da receita'}<input id="rxf" type="file" accept="image/*" hidden data-p="p.id"data-i="{id}"></label>`;
+modal(`<h2 style="margin-top:0">Receita · ${m.n}</h2>`+(m.rx?(m.rx=='demo'?`<div class="rx"><b>Dr(a). Exemplo, CRM 00000</b><hr><p>Paciente: p.n</p><p>{m.n} ${m.d}<br>Administrar às m.t,usocontínuo.</p><pstyle="margin-top:30px;opacity:.5">[receitadedemonstração]</p></div>`:`<imgsrc="{m.rx}" alt="Foto da receita" style="width:100%;border-radius:12px">`):'<div class="empty">Nenhuma receita anexada a este medicamento.</div>')+up+'<button class="btn out wide" style="margin-top:8px" data-a="close">Fechar</button>');return}
+case'addmed':if(lk(P[id-1])){toast(RO);return}modal(`<h2 style="margin-top:0">Adicionar medicamento</h2><div class="fg"><div class="full"><label for="m-n">Nome</label><input id="m-n" type="text"></div><div><label for="m-d">Dose</label><input id="m-d" type="text" placeholder="50 mg"></div><div><label for="m-t">Horário</label><input id="m-t" type="time" value="08:00"></div></div><div class="acts"><button class="btn ok" data-a="savemed" data-v="${id}">Adicionar</button><button class="btn out" data-a="close">Cancelar</button></div>`);return;
+case'savemed':{if(lk(P[id-1])){toast(RO);return}const n=$('#m-n').value.trim();if(!n){toast('Informe o nome do medicamento');return}const p=P[id-1],i=t.dataset.i,o={n:esc(n),d:esc($('#m-d').value.trim()),t:$('#m-t').value||'08:00'};if(i!==undefined&&i!=='')Object.assign(p.meds[+i],o);else p.meds.push({...o,done:null,rx:null});p.meds.sort((x,y)=>x.t.localeCompare(y.t));save();close();toast('Medicamento salvo');break}
+case'newpac':S.pat='new';S.np={al:{Medicamentos:[],Materiais:[],Alimentos:[]}};scrollTo(0,0);break;
+case'addal':{const c=t.dataset.c,i=('#al-'+c),x=esc(i.value.trim());if(x&&!S.np.al[c].includes(x))S.np.al[c].push(x);i.value='';('#chips-'+c).innerHTML=chips(c);i.focus();return}
+case'delal':{const c=t.dataset.c;S.np.al[c].splice(id,1);$('#chips-'+c).innerHTML=chips(c);return}
+case'savepac':{const g=x=>('#n-'+x).value.trim(),bad=[],fam=S.role=='fam';['nome','idade','dx','ct'].forEach(x=>('#n-'+x).classList.remove('bad'));
+if(S.np.id&&!fam&&lk(P[S.np.id-1])){toast(RO);return}
+if(!g('nome'))bad.push('nome');if(!(+g('idade')>0))bad.push('idade');if(!g('dx'))bad.push('dx');if(g('ct').replace(/\D/g,'').length<10)bad.push('ct');
+if(bad.length){bad.forEach(x=>('#n-'+x).classList.add('bad'));('#n-'+bad[0]).focus();toast(bad[0]=='ct'?'Informe o telefone do familiar com DDD':'Preencha os campos marcados');return}
+if(fam&&!S.np.id&&!$('#n-cons').checked){toast('Marque a autorização para continuar');return}
+const dat={n:esc(g('nome')),age:+g('idade'),dx:esc(g('dx')),end:esc(g('end'))||'Endereço não informado',dep:$('#n-dep').value,al:S.np.al,ct:{n:esc(g('cn')),par:esc(g('cp')),tel:esc(g('ct'))}};
+if(!fam)dat.v={p12:+g('v12')||0,p24:+g('v24')||0,av:+g('vav')||0};
+const old=S.np.id?P[S.np.id-1]:null;
+if(fam)dat.meds=S.np.meds.map(m=>{const o=old&&old.meds.find(x=>x.n==m.n&&x.t==m.t);return {n:m.n,d:m.d,t:m.t,done:o?o.done:null,rx:o?o.rx:null}});
+if(old){Object.assign(old,dat);if(!fam)S.pat=old.id}
+else{const np={id:P.length+1,custom:true,origem:fam?'fam':'prof',famOwner:fam,linked:!fam,code:fam?genCode():'',meds:[],vit:[],...dat};if(fam)np.consent=new Date().toISOString();P.push(np);if(fam){S.fid=np.id;try{localStorage.setItem(LS+'-fam',np.id)}catch(x){}}else S.pat=np.id}
+save();S.np=null;toast('Paciente salvo');scrollTo(0,0);break}
+case'newap':{const pt=P.find(vis);if(!pt){toast('Cadastre ou adicione um paciente primeiro');return}modal(apForm({d:key(S.date),s:'07:00',ty:'p12',p:pt.id,mode:'fixo',valor:price(pt,'p12')||''}));epv();return}
+case'editap':modal(apForm(ap));epv();return;
+case'saveap':{const g=x=>$('#e-'+x),pid=+g('p').value,ty=g('ty').value;
+if(!g('d').value||!g('s').value){toast('Informe data e horário');return}
+if(g('v').value===''||+g('v').value<0){toast('Informe o valor combinado');return}
+const o={p:pid,d:g('d').value,s:g('s').value,ty,mode:g('m').value,valor:+g('v').value,dur:ty=='visita'?(+g('dur').value||1):undefined};
+const x=id?A.find(q=>q.id==id):null;
+if(x){let ci=x.ci,co=x.co;if(g('ci')){ci=g('ci').value?new Date(g('ci').value).getTime():null;co=g('co').value?new Date(g('co').value).getTime():null;if(ci&&co&&co<=ci){toast('A saída precisa ser depois da entrada');return}}
+Object.assign(x,o);if(g('ci')){x.ci=ci;x.co=co;x.st=co?'conc':ci?'and':(x.st=='conc'||x.st=='and'?'conf':x.st)}}
+else A.push({id:Math.max(0,...A.map(q=>q.id))+1,...o,st:'pend',ci:null,co:null,paid:null});
+S.date=D0(o.d+'T00:00');close();toast('Atendimento salvo');break}
+case'delap':t.dataset.a='delap2';t.textContent='Toque de novo para excluir';return;
+case'delap2':A=A.filter(q=>q.id!=id);close();toast('Atendimento excluído');break;
+case'editpac':{const p=P[id-1];if(S.role!='fam'&&lk(p)){toast(RO);return}S.np={id:p.id,al:Object.assign({Medicamentos:[],Materiais:[],Alimentos:[]},JSON.parse(JSON.stringify(p.al))),meds:p.meds.map(m=>({n:m.n,d:m.d,t:m.t}))};S.pat='new';scrollTo(0,0);break}
+case'editmed':{const p=P[+t.dataset.p-1],m=p.meds[id];if(lk(p)){toast(RO);return}modal(`<h2 style="margin-top:0">Editar medicamento</h2><div class="fg"><div class="full"><label for="m-n">Nome</label><input id="m-n" type="text" value="m.n"></div><div><labelfor="m-d">Dose</label><inputid="m-d"type="text"value="{m.d}"></div><div><label for="m-t">Horário</label><input id="m-t" type="time" value="m.t"></div></div><divclass="acts"><buttonclass="btnok"data-a="savemed"data-v="{p.id}" data-i="id">Salvar</button><buttonclass="btnout"data-a="close">Cancelar</button><buttonclass="btnout"style="color:var(--rd)"data-a="delmed"data-p="{p.id}" data-v="${id}">Excluir</button></div>`);return}
+case'delmed':{if(lk(P[+t.dataset.p-1])){toast(RO);return}P[+t.dataset.p-1].meds.splice(id,1);save();close();toast('Medicamento removido');break}
+case'role':S.role=v;break;
+case'cancelnp':S.np=null;break;
+case'addm2':{const n=$('#n-mn').value.trim();if(!n){toast('Informe o nome do medicamento');return}S.np.meds.push({n:esc(n),d:esc($('#n-md').value.trim()),t:$('#n-mt').value||'08:00'});S.np.meds.sort((x,y)=>x.t.localeCompare(y.t));$('#mchips').innerHTML=mchips();('#n-mn').value='';('#n-md').value='';$('#n-mn').focus();return}
+case'delm2':S.np.meds.splice(id,1);$('#mchips').innerHTML=mchips();return;
+case'editvals':{const p=P[id-1];modal(`<h2 style="margin-top:0">Meus valores com esta família</h2><div class="fg"><div><label for="q12">Plantão 12h</label><input id="q12" type="number" min="0" value="price(p,'p12')||''"></div><div><labelfor="q24">Plantão24h</label><inputid="q24"type="number"min="0"value="{price(p,'p24')||''}"></div><div class="full"><label for="qav">Visita / procedimento avulso</label><input id="qav" type="number" min="0" value="price(p,'visita')||''"></div></div><divclass="acts"><buttonclass="btnok"data-a="savevals"data-v="{id}">Salvar</button><button class="btn out" data-a="close">Cancelar</button></div>`);return}
+case'savevals':{P[id-1].v={p12:+('#q12').value||0,p24:+('#q24').value||0,av:+$('#qav').value||0};save();close();toast('Valores salvos');break}
+case'tema':S.tema=v;try{localStorage.setItem(LS+'-tema',v)}catch(x){}applyTheme();break;
+case'tema2':{const dk=S.tema=='dark'||(S.tema=='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);S.tema=dk?'light':'dark';try{localStorage.setItem(LS+'-tema',S.tema)}catch(x){}applyTheme();break}
+case'addcode':modal(`<h2 style="margin-top:0">Adicionar paciente</h2><p class="mut">Peça à família o código ou o QR Code que aparece em "Compartilhar com o profissional".</p><label for="cc-in">Código</label><input id="cc-in" type="text" placeholder="CC-ABC123" maxlength="40" autocapitalize="characters" autocomplete="off"><div class="acts"><button class="btn ok" data-a="doaddcode">Adicionar</button></div><label class="btn out wide" style="margin-top:10px;cursor:pointer">Ler QR Code com a câmera<input id="qrf" type="file" accept="image/*" capture="environment" hidden></label><button class="btn out wide" style="margin-top:8px" data-a="close">Cancelar</button>`);return;
+case'doaddcode':{const c=normCode($('#cc-in').value);if(!c){toast('Digite o código');return}const p=P.find(x=>!x.del&&!x.trash&&x.code&&normCode(x.code)==c);
+if(!p){toast('Código não encontrado neste aparelho. Peça à família o link pelo WhatsApp.');return}
+if(p.origem!='fam'||p.linked){toast('Este paciente já está na sua lista');return}
+p.linked=true;save();close();S.tab='pac';S.pat=null;toast(unesc(p.n)+' adicionado');break}
+case'invok':{const p=importInv(S.inv);S.inv=null;try{history.replaceState(null,'',location.pathname+location.search)}catch(x){}close();S.tab='pac';S.pat=null;toast(p?'Paciente adicionado':'Link inválido');break}
+case'invno':S.inv=null;close();return;
+case'copycode':try{navigator.clipboard.writeText(v);toast('Código copiado')}catch(x){toast('Copie manualmente: '+v)}return;
+case'askdel':{const k=t.dataset.k,p=P[id-1];S.seq=[...crypto.getRandomValues(new Uint8Array(5))].map(x=>'ABCDEFGHJKLMNPQRSTUVWXYZ'[x%24]).join('');
+const T={trash:['Mover para a lixeira','O paciente sai da sua lista e vai para a lixeira. Você pode restaurar em até 30 dias.'],unlink:['Remover da minha lista','O paciente sai da sua lista. Os dados continuam com a família, e você pode adicionar de novo pelo código.'],perm:['Apagar definitivamente','Os dados de saúde serão apagados de vez. Não dá para desfazer.'],famtrash:['Mover cadastro para a lixeira','O cadastro sai do seu acesso e do acesso do profissional. Você pode restaurar em até 30 dias.'],famperm:['Apagar definitivamente','Todos os dados do paciente, inclusive o nome, serão apagados de vez. Não dá para desfazer.']}[k];
+modal(`<h2 style="margin-top:0">T[0]?</h2><p><b>{p.n}</b></p><p>T[1]</p><p>Paraconfirmar,digiteasequênciaabaixo:</p><divstyle="font-size:30px;font-weight:700;letter-spacing:8px;text-align:center;margin:8px0">{S.seq}</div><input id="dsq" type="text" autocomplete="off" autocapitalize="characters" maxlength="5" style="text-align:center;letter-spacing:6px;font-size:20px"><div class="acts"><button class="btn" id="dbtn" disabled data-a="doconf" data-k="k"data-v="{id}" style="background:var(--rd);color:#fff">${T[0]}</button><button class="btn out" data-a="close">Cancelar</button></div>`);return}
+case'doconf':{const k=t.dataset.k,p=P[id-1];if(!p||$('#dsq').value.trim().toUpperCase()!=S.seq){toast('A sequência não confere');return}
+if(k=='trash'||k=='famtrash'){p.trashAp=A.filter(a=>a.p==p.id&&!a.co);A=A.filter(a=>a.p!=p.id||a.co);p.trash=Date.now();save();toast('Movido para a lixeira. Dá para restaurar em até 30 dias.')}
+else if(k=='unlink'){A=A.filter(a=>a.p!=p.id||a.co);p.linked=false;save();toast('Removido da sua lista. Adicione de novo pelo código.')}
+else{A=A.filter(a=>a.p!=p.id||a.co);scrub(p,k=='famperm');toast('Apagado definitivamente')}
+if(k=='famperm'){S.fid=0;try{localStorage.removeItem(LS+'-fam')}catch(x){}}
+close();S.pat=k=='perm'?'trash':null;S.np=null;break}
+case'restore':restoreP(P[id-1]);toast('Paciente restaurado');break;
+case'lixo':S.pat='trash';break;
+case'lgok':if(!$('#lg').checked){toast('Marque "Li e concordo" para continuar');return}S.lgpd=true;try{localStorage.setItem(LS+'-lgpd',new Date().toISOString())}catch(x){}close();return;
+case'lgno':close();S.pat=null;break;
+case'fb':modal(`<h2 style="margin-top:0">Enviar feedback / Reportar erro</h2><label for="fbt">Tipo</label><select id="fbt"><option>Erro</option><option>Sugestão</option><option>Dúvida</option></select><label for="fbx" style="margin-top:10px">O que aconteceu?</label><textarea id="fbx" rows="4" maxlength="500" placeholder="Conte em poucas palavras. Não inclua dados de pacientes."></textarea><div class="acts"><button class="btn ok" data-a="fbsend">Enviar por WhatsApp</button><button class="btn out" data-a="fbsave">Só salvar</button></div>`);return;
+case'fbsend':case'fbsave':{const x=$('#fbx').value.trim();if(!x){toast('Escreva uma mensagem curta');return}const r={t:new Date().toISOString(),tipo:$('#fbt').value,tela:S.tab,msg:x};try{const l=JSON.parse(localStorage.getItem(LS+'-fb')||'[]');l.push(r);localStorage.setItem(LS+'-fb',JSON.stringify(l))}catch(x2){}
+if(a=='fbsend')open('https://wa.me/'+FEEDBACK_WA+'?text='+encodeURIComponent('CuidaCasa · '+r.tipo+' (tela: '+r.tela+'): '+x),'_blank');close();toast('Obrigado! Feedback registrado');return}
+case'vit':{const p=P[id-1],g=x=>$('#'+x).value.trim();if(!g('pa')&&!g('gl')&&!g('tp')){toast('Preencha ao menos um sinal vital');return}p.vit.unshift({ts:Date.now(),t:hm(Date.now()),pa:g('pa'),gl:g('gl'),tp:g('tp'),ob:g('ob')});save();toast('Registro salvo');break}
+case'find':S.q={sp:('#sp').value,km:+('#km').value,d:('#dd').value,t:('#tt').value,run:true};if(!S.q.d||!S.q.t){toast('Informe data e horário');S.q.run=false}break;
+case'nurse':modal(perfil(NU[id],false)+`<p class="mut">O valor é combinado direto com o profissional, conforme distância, horário e cuidado necessário.</p><div class="acts"><button class="btn ok" data-a="req">Solicitar atendimento</button><button class="btn out" data-a="close">Fechar</button></div>`);return;
+case'req':close();toast('Solicitação enviada. Combine o pagamento direto com o profissional.');return;
+case'fsub':S.fsub=v;break;
+case'pay':modal(`<h2 style="margin-top:0">Baixa manual</h2><p>Como o paciente pagou brl(val(ap))?</p><divclass="acts"><buttonclass="btnok"data-a="paid"data-v="{id}" data-m="PIX">PIX</button><button class="btn sec" data-a="paid" data-v="${id}" data-m="Dinheiro">Dinheiro</button></div>`);return;
+case'paid':ap.paid=t.dataset.m;close();toast('Pagamento registrado via '+ap.paid);break;
+case'rec':if(!ME.cpf||!ME.coren){toast('Preencha CPF e COREN no seu perfil para emitir o recibo');S.fsub='perf';S.edit=true;break}modal(recibo(ap));return;
+case'saveperf':{const g=x=>('#f-'+x).value.trim(),bad=[];['n','cpf','coren'].forEach(x=>('#f-'+x).classList.remove('bad'));
+if(!g('n'))bad.push('n');if(!cpfOk(g('cpf')))bad.push('cpf');if(g('coren').length<4)bad.push('coren');
+if(bad.length){bad.forEach(x=>('#f-'+x).classList.add('bad'));('#f-'+bad[0]).focus();toast(bad[0]=='cpf'?'CPF inválido. Confira os 11 números':'Preencha os campos marcados');return}
+Object.assign(ME,{n:g('n'),cpf:g('cpf'),rg:g('rg'),rgOrg:g('org'),nasc:g('nasc'),tel:g('tel'),email:g('em'),cidade:g('cid'),role:$('#f-cat').value,coren:g('coren'),sp:[...document.querySelectorAll('.spc:checked')].map(x=>x.value),foto:S.tmp||ME.foto||''});S.tmp=null;
+try{localStorage.setItem(LS,JSON.stringify(ME))}catch(x){}
+S.edit=false;toast('Dados salvos');break}
+case'print':try{print()}catch(x){toast('Use o menu do navegador para imprimir')}return;
+case'close':close();return;
+case'share':{const u=location.href.split('#')[0]+'#perfil';modal(`<h2 style="margin-top:0">Compartilhar perfil</h2><div id="qr" style="display:grid;place-items:center;padding:14px;background:#fff;border-radius:14px"></div><div class="acts"><a class="btn ok" style="text-decoration:none" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent('Perfil de '+ME.n+' ('+ME.role+', COREN '+ME.coren+'): '+u)}">Enviar no WhatsApp</a><button class="btn out" data-a="copy">Copiar link</button></div><button class="btn sec wide" style="margin-top:8px" data-a="close">Fechar</button>`);try{new QRCode($('#qr'),{text:u,width:180,height:180})}catch(x){$('#qr').textContent='QR Code indisponível offline'}return}
+case'copy':try{navigator.clipboard.writeText(location.href);toast('Link copiado')}catch(x){toast('Não foi possível copiar')}return;
+}saveA();render();if(S.user&&S.role=='prof'&&S.inv&&!S.invAsk&&!S.edit){S.invAsk=true;showInv()}if(S.tab=='pac'&&S.pat&&S.pat!='new'&&S.pat!='trash'&&!S.lgpd)lgpd()});
+document.addEventListener('input',e=>{if(e.target.id=='f-cpf')e.target.value=mCpf(e.target.value);if(e.target.id=='f-tel'||e.target.id=='n-ct')e.target.value=mTel(e.target.value);if(e.target.id=='km')$('#kmv').textContent=e.target.value});
+if(GOOGLE_CLIENT_ID){const g=document.createElement('script');g.src='https://accounts.google.com/gsi/client';g.onload=render;document.head.appendChild(g)}
+document.addEventListener('change',e=>{const i=e.target;
+if(i.id=='rxf'&&i.files[0]){const m=P[+i.dataset.p-1].meds[+i.dataset.i];pic(i.files[0],1000,u=>{m.rx=u;save();close();toast('Receita anexada');render()})}
+if(i.id=='f-foto'&&i.files[0])pic(i.files[0],240,u=>{S.tmp=u;const p=$('#fprev');p.style.background='url('+u+') center/cover';p.textContent=''});
+if(i.id=='fm'||i.id=='fy'){S[i.id]=+i.value;render()}
+if(i.id=='qrf'&&i.files[0])readQR(i.files[0]).then(t=>{if(!t){toast('Não consegui ler o QR Code. Tente com mais luz ou digite o código.');return}$('#cc-in').value=t;document.querySelector('[data-a=doaddcode]').click()})});
+document.addEventListener('keydown',e=>{if(e.key=='Enter'&&e.target.classList&&e.target.classList.contains('alin')){e.preventDefault();document.querySelector('[data-a=addal][data-c="'+e.target.dataset.c+'"]').click()}});
+document.addEventListener('input',e=>{if(e.target.id&&e.target.id.startsWith('e-')&&('#e-pv'))epv();if(e.target.id=='dsq')('#dbtn').disabled=e.target.value.trim().toUpperCase()!=S.seq});
+document.addEventListener('change',e=>{const i=e.target;if((i.id=='e-p'||i.id=='e-ty')&&$('#e-pv')){const pt=P[+$('#e-p').value-1];('#e-m').value='fixo';('#e-v').value=price(pt,$('#e-ty').value)||'';epv()}else if(i.id=='e-m'&&$('#e-pv'))epv()});
+addEventListener('storage',e=>{try{if(e.key==LS+'-pac'){const v=JSON.parse(e.newValue||'null');if(Array.isArray(v)&&v.length)P.splice(0,P.length,...v)}if(e.key==LS+'-ag'){const v=JSON.parse(e.newValue||'null');if(Array.isArray(v))A=v}}catch(x){}
+const ae=document.activeElement;if(S.user&&!$('#modal').classList.contains('open')&&!S.np&&!S.edit&&!(ae&&/INPUT|TEXTAREA|SELECT/.test(ae.tagName)))render()});
+setInterval(()=>{if(S.user&&(S.tab=='agenda'||S.tab=='acomp')&&!$('#modal').classList.contains('open'))render()},60000);
+P.forEach(p=>{if(p.trash&&Date.now()-p.trash>30*864e5)scrub(p,!!p.famOwner)});
+render();
+</script>
+</body>
+</html>
+
+
